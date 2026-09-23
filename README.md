@@ -62,7 +62,7 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 Project ini sudah memiliki entry point serverless di `api/index.php` dan konfigurasi `vercel.json`.
 
 1. Import repository `FadhelAnshoruddin/tugas-indo-web-phising` ke Vercel.
-2. Atur **Root Directory** ke folder project Laravel, yaitu `moduk` jika repository berisi folder pembungkus.
+2. Biarkan **Root Directory** pada root/default karena repository ini langsung berisi project Laravel.
 3. Tambahkan environment variables berikut di Vercel:
 
 ```env
