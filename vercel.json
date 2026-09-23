@@ -14,8 +14,16 @@
             "dest": "/public/build/$1"
         },
         {
-            "src": "/(manifest.webmanifest|sw.js|icons/(.*))",
-            "dest": "/public/$1"
+            "src": "/manifest.webmanifest",
+            "dest": "/public/manifest.webmanifest"
+        },
+        {
+            "src": "/sw.js",
+            "dest": "/public/sw.js"
+        },
+        {
+            "src": "/icons/lucky-loop.svg",
+            "dest": "/public/icons/lucky-loop.svg"
         },
         {
             "src": "/(.*)",
