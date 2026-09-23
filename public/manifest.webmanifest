@@ -1,0 +1,20 @@
+{
+    "name": "Lucky Loop - Simulasi Keamanan",
+    "short_name": "Lucky Loop",
+    "description": "Simulasi edukasi spin wheel dan kesadaran keamanan e-wallet.",
+    "lang": "id-ID",
+    "start_url": "/spin-wheel",
+    "scope": "/",
+    "display": "standalone",
+    "background_color": "#102a43",
+    "theme_color": "#102a43",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "/icons/lucky-loop.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        }
+    ]
+}

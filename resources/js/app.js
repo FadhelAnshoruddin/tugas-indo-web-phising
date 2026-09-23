@@ -1,4 +1,30 @@
+let deferredInstallPrompt;
+
+window.addEventListener('beforeinstallprompt', (event) => {
+	event.preventDefault();
+	deferredInstallPrompt = event;
+	const installButton = document.querySelector('#pwaInstallButton');
+	if (installButton) installButton.hidden = false;
+});
+
+window.addEventListener('appinstalled', () => {
+	deferredInstallPrompt = null;
+	const installButton = document.querySelector('#pwaInstallButton');
+	if (installButton) installButton.hidden = true;
+});
+
 document.addEventListener('DOMContentLoaded', () => {
+	if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => {});
+
+	const installButton = document.querySelector('#pwaInstallButton');
+	installButton?.addEventListener('click', async () => {
+		if (!deferredInstallPrompt) return;
+		deferredInstallPrompt.prompt();
+		await deferredInstallPrompt.userChoice;
+		deferredInstallPrompt = null;
+		installButton.hidden = true;
+	});
+
 	const walletCard = document.querySelector('#walletCard');
 	if (walletCard) {
 		const initialBalance = 80_000_000;

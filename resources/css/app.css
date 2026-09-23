@@ -12,6 +12,7 @@
 * { box-sizing: border-box; }
 body { margin: 0; font-family: var(--font-sans); background: #102a43; }
 button, input { font: inherit; }
+.pwa-install-button { position: fixed; bottom: 1rem; right: 1rem; z-index: 40; border: 1px solid rgba(244, 211, 94, .5); border-radius: 999px; background: #f4d35e; color: #102a43; padding: .7rem 1rem; font-size: .75rem; font-weight: 800; box-shadow: 0 8px 24px rgba(4, 15, 28, .3); }
 .wheel-shadow { box-shadow: 0 0 0 10px rgba(244, 211, 94, .12), 0 22px 70px rgba(4, 15, 28, .48); }
 .modal-backdrop { background: rgba(8, 25, 40, .72); backdrop-filter: blur(8px); }
 .pop { animation: pop .35s ease-out; }
