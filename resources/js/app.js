@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		const warningElement = document.querySelector('#warning');
 		const activityCountElement = document.querySelector('#activityCount');
 		const securityBadge = document.querySelector('#securityBadge');
+		const finalAlert = document.querySelector('#finalAlert');
 		const csrf = document.querySelector('meta[name="csrf-token"]')?.content;
 
 		const claimPendingPrize = async () => {
@@ -48,29 +49,43 @@ document.addEventListener('DOMContentLoaded', () => {
 			while (transactionsElement.children.length > 12) transactionsElement.lastElementChild.remove();
 		};
 
-		const simulationStep = () => {
-			if (balance <= 0) {
-				balance = 0;
+		const startSimulation = () => {
+			const duration = 7000;
+			const startTime = performance.now();
+			let lastActivity = startTime;
+
+			const animate = (currentTime) => {
+				const progress = Math.min((currentTime - startTime) / duration, 1);
+				const nextBalance = Math.max(0, Math.round(initialBalance * (1 - progress)));
+				const amount = balance - nextBalance;
+				balance = nextBalance;
+
+				if (amount > 0 && currentTime - lastActivity >= 160) {
+					addWarning(amount);
+					lastActivity = currentTime;
+					warningElement.textContent = 'Peringatan simulasi: aktivitas mencurigakan sedang ditampilkan untuk edukasi.';
+					walletCard.classList.remove('wallet-shake');
+					void walletCard.offsetWidth;
+					walletCard.classList.add('wallet-shake');
+				}
+
+				render();
+				if (progress < 1) {
+					window.requestAnimationFrame(animate);
+					return;
+				}
+
 				warningElement.textContent = 'Simulasi selesai — saldo telah mencapai Rp 0. Tidak ada transaksi nyata.';
 				securityBadge.textContent = '! Simulasi selesai';
+				finalAlert?.classList.remove('hidden');
 				render();
-				return;
-			}
+			};
 
-			const percentage = 0.08 + Math.random() * 0.18;
-			const amount = Math.min(balance, Math.max(250_000, Math.round(balance * percentage)));
-			balance -= amount;
-			addWarning(amount);
-			warningElement.textContent = balance > 0 ? 'Peringatan simulasi: saldo berkurang secara visual untuk demonstrasi keamanan.' : 'Saldo simulasi telah mencapai Rp 0.';
-			walletCard.classList.remove('wallet-shake');
-			void walletCard.offsetWidth;
-			walletCard.classList.add('wallet-shake');
-			render();
-			window.setTimeout(simulationStep, 160);
+			window.requestAnimationFrame(animate);
 		};
 
 		render();
-		claimPendingPrize().finally(() => window.setTimeout(simulationStep, 700));
+		claimPendingPrize().finally(() => window.setTimeout(startSimulation, 500));
 		return;
 	}
 
