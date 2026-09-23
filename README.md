@@ -73,7 +73,7 @@ APP_DEBUG=false
 APP_URL=https://domain-vercel-anda.vercel.app
 
 DB_CONNECTION=mysql
-DB_HOST=host-mysql-eksternal
+DB_HOST=YOUR_MYSQL_HOST
 DB_PORT=3306
 DB_DATABASE=nama_database
 DB_USERNAME=username_database
