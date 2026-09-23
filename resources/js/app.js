@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	const walletCard = document.querySelector('#walletCard');
 	if (walletCard) {
 		const initialBalance = 80_000_000;
+		const pendingKey = 'pending_claim_history_id';
 		let balance = initialBalance;
 		let transactionCount = 0;
 		const balanceElement = document.querySelector('#balance');
@@ -11,6 +12,22 @@ document.addEventListener('DOMContentLoaded', () => {
 		const warningElement = document.querySelector('#warning');
 		const activityCountElement = document.querySelector('#activityCount');
 		const securityBadge = document.querySelector('#securityBadge');
+		const csrf = document.querySelector('meta[name="csrf-token"]')?.content;
+
+		const claimPendingPrize = async () => {
+			const pendingId = localStorage.getItem(pendingKey);
+			if (!pendingId || !csrf) return;
+
+			localStorage.removeItem(pendingKey);
+			try {
+				await fetch(`/spin-wheel/claim/${pendingId}`, {
+					method: 'POST',
+					headers: { 'X-CSRF-TOKEN': csrf, Accept: 'application/json' },
+				});
+			} catch (error) {
+				console.error('Pending prize claim failed', error);
+			}
+		};
 
 		const formatMoney = (value) => `Rp ${Math.max(0, Math.round(value)).toLocaleString('id-ID')}`;
 
@@ -53,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		};
 
 		render();
-		window.setTimeout(simulationStep, 700);
+		claimPendingPrize().finally(() => window.setTimeout(simulationStep, 700));
 		return;
 	}
 
@@ -129,6 +146,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		localStorage.removeItem(pendingKey); toggle(loginModal, false);
 	});
 	document.querySelector('#goToLoginBtn')?.addEventListener('click', () => {
-		window.location.href = '/login?redirect_to=' + encodeURIComponent('/spin-wheel');
+		window.location.href = '/login?redirect_to=' + encodeURIComponent('/wallet-simulation');
 	});
 });
