@@ -56,3 +56,39 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Deploy ke Vercel
+
+Project ini sudah memiliki entry point serverless di `api/index.php` dan konfigurasi `vercel.json`.
+
+1. Import repository `FadhelAnshoruddin/tugas-indo-web-phising` ke Vercel.
+2. Atur **Root Directory** ke folder project Laravel, yaitu `moduk` jika repository berisi folder pembungkus.
+3. Tambahkan environment variables berikut di Vercel:
+
+```env
+APP_NAME=Lucky Loop
+APP_ENV=production
+APP_KEY=base64:generate-dengan-php-artisan-key-generate
+APP_DEBUG=false
+APP_URL=https://domain-vercel-anda.vercel.app
+
+DB_CONNECTION=mysql
+DB_HOST=host-mysql-eksternal
+DB_PORT=3306
+DB_DATABASE=nama_database
+DB_USERNAME=username_database
+DB_PASSWORD=password_database
+
+SESSION_DRIVER=database
+CACHE_STORE=database
+LOG_CHANNEL=stderr
+```
+
+Database MySQL harus berada di layanan eksternal yang dapat diakses internet, karena filesystem Vercel bersifat sementara. Jalankan migration dan seeder dari komputer lokal menggunakan kredensial database production:
+
+```bash
+php artisan migrate --force
+php artisan db:seed --class=PrizeSeeder --force
+```
+
+Setelah deployment selesai, buka `/spin-wheel` pada URL Vercel. Vercel akan menjalankan `npm run build` untuk membuat asset frontend.
