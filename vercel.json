@@ -1,12 +1,12 @@
 {
     "version": 2,
-    "buildCommand": "npm run build",
-    "builds": [
-        {
-            "src": "api/index.php",
-            "use": "vercel-php@0.9.0"
+    "buildCommand": "npm run build && php artisan view:cache",
+    "functions": {
+        "api/index.php": {
+            "runtime": "vercel-php@0.9.0",
+            "maxDuration": 30
         }
-    ],
+    },
     "routes": [
         {
             "src": "/build/(.*)",

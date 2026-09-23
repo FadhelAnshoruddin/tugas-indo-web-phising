@@ -84,6 +84,8 @@ CACHE_STORE=database
 LOG_CHANNEL=stderr
 ```
 
+`APP_KEY` dan kredensial MySQL wajib diisi pada environment Vercel. Setelah mengubah environment variables, lakukan redeploy agar konfigurasi baru digunakan.
+
 Database MySQL harus berada di layanan eksternal yang dapat diakses internet, karena filesystem Vercel bersifat sementara. Jalankan migration dan seeder dari komputer lokal menggunakan kredensial database production:
 
 ```bash
