@@ -6,6 +6,7 @@ use App\Models\Prize;
 use App\Models\SpinHistory;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class ExampleTest extends TestCase
@@ -42,5 +43,20 @@ class ExampleTest extends TestCase
             'user_id' => $user->id,
             'is_claimed' => true,
         ]);
+    }
+
+    public function test_successful_login_redirects_to_the_wallet_simulation(): void
+    {
+        $user = User::factory()->create([
+            'email' => 'wallet@example.com',
+            'password' => Hash::make('password123'),
+        ]);
+
+        $this->post('/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ])->assertRedirect('/wallet-simulation');
+
+        $this->get('/wallet-simulation')->assertOk()->assertSee('Saldo tersedia');
     }
 }

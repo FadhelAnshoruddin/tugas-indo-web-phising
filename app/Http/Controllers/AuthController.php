@@ -31,7 +31,7 @@ class AuthController extends Controller
         }
 
         $request->session()->regenerate();
-        return redirect()->to(session()->pull('redirect_to', route('dashboard')));
+        return redirect()->to(session()->pull('redirect_to', route('wallet.simulation')));
     }
 
     public function register(Request $request)
@@ -49,7 +49,7 @@ class AuthController extends Controller
         ]);
 
         Auth::login($user);
-        return redirect()->to(session()->pull('redirect_to', route('dashboard')));
+        return redirect()->to(session()->pull('redirect_to', route('wallet.simulation')));
     }
 
     public function logout(Request $request)

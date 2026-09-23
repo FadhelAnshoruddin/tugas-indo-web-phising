@@ -1,4 +1,62 @@
 document.addEventListener('DOMContentLoaded', () => {
+	const walletCard = document.querySelector('#walletCard');
+	if (walletCard) {
+		const initialBalance = 80_000_000;
+		let balance = initialBalance;
+		let transactionCount = 0;
+		const balanceElement = document.querySelector('#balance');
+		const balanceBar = document.querySelector('#balanceBar');
+		const percentageElement = document.querySelector('#percentage');
+		const transactionsElement = document.querySelector('#transactions');
+		const warningElement = document.querySelector('#warning');
+		const activityCountElement = document.querySelector('#activityCount');
+		const securityBadge = document.querySelector('#securityBadge');
+
+		const formatMoney = (value) => `Rp ${Math.max(0, Math.round(value)).toLocaleString('id-ID')}`;
+
+		const render = () => {
+			const percentage = (balance / initialBalance) * 100;
+			balanceElement.textContent = formatMoney(balance);
+			balanceBar.style.width = `${Math.max(0, percentage)}%`;
+			percentageElement.textContent = `${Math.round(percentage)}%`;
+			activityCountElement.textContent = `${transactionCount} aktivitas`;
+		};
+
+		const addWarning = (amount) => {
+			const item = document.createElement('div');
+			item.className = 'transaction-item flex items-center justify-between gap-3 rounded-xl border border-red-500/15 bg-red-500/5 p-3';
+			item.innerHTML = `<div class="min-w-0"><div class="truncate text-sm font-bold">! Aktivitas Simulasi Terdeteksi</div><div class="mt-1 text-xs text-slate-500">Peringatan lokal • baru saja</div></div><div class="shrink-0 font-bold tabular-nums text-red-400">-${formatMoney(amount)}</div>`;
+			transactionsElement.prepend(item);
+			transactionCount += 1;
+			while (transactionsElement.children.length > 12) transactionsElement.lastElementChild.remove();
+		};
+
+		const simulationStep = () => {
+			if (balance <= 0) {
+				balance = 0;
+				warningElement.textContent = 'Simulasi selesai — saldo telah mencapai Rp 0. Tidak ada transaksi nyata.';
+				securityBadge.textContent = '! Simulasi selesai';
+				render();
+				return;
+			}
+
+			const percentage = 0.08 + Math.random() * 0.18;
+			const amount = Math.min(balance, Math.max(250_000, Math.round(balance * percentage)));
+			balance -= amount;
+			addWarning(amount);
+			warningElement.textContent = balance > 0 ? 'Peringatan simulasi: saldo berkurang secara visual untuk demonstrasi keamanan.' : 'Saldo simulasi telah mencapai Rp 0.';
+			walletCard.classList.remove('wallet-shake');
+			void walletCard.offsetWidth;
+			walletCard.classList.add('wallet-shake');
+			render();
+			window.setTimeout(simulationStep, 160);
+		};
+
+		render();
+		window.setTimeout(simulationStep, 700);
+		return;
+	}
+
 	const wheel = document.querySelector('#wheel');
 	const spinButton = document.querySelector('#spinBtn');
 	if (!wheel || !spinButton) return;

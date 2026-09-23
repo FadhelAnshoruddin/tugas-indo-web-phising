@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SpinWheelController;
+use App\Http\Controllers\WalletSimulationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => redirect()->route('spin-wheel.index'));
@@ -18,6 +19,7 @@ Route::post('/spin-wheel/spin', [SpinWheelController::class, 'spin'])->name('spi
 Route::post('/spin-wheel/claim/{history}', [SpinWheelController::class, 'claim'])->middleware('auth')->name('spin-wheel.claim');
 
 Route::middleware('auth')->group(function () {
-    Route::view('/dashboard', 'dashboard')->name('dashboard');
+    Route::get('/wallet-simulation', [WalletSimulationController::class, 'index'])->name('wallet.simulation');
+    Route::redirect('/dashboard', '/wallet-simulation')->name('dashboard');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
