@@ -1,0 +1,23 @@
+<?php
+
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SpinWheelController;
+use Illuminate\Support\Facades\Route;
+
+Route::get('/', fn () => redirect()->route('spin-wheel.index'));
+
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.store');
+    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+    Route::post('/register', [AuthController::class, 'register'])->name('register.store');
+});
+
+Route::get('/spin-wheel', [SpinWheelController::class, 'index'])->name('spin-wheel.index');
+Route::post('/spin-wheel/spin', [SpinWheelController::class, 'spin'])->name('spin-wheel.spin');
+Route::post('/spin-wheel/claim/{history}', [SpinWheelController::class, 'claim'])->middleware('auth')->name('spin-wheel.claim');
+
+Route::middleware('auth')->group(function () {
+    Route::view('/dashboard', 'dashboard')->name('dashboard');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+});
