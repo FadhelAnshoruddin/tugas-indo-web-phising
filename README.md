@@ -93,4 +93,6 @@ php artisan migrate --force
 php artisan db:seed --class=PrizeSeeder --force
 ```
 
+Untuk demo tanpa database cloud, deployment juga membawa `database/vercel.sqlite` yang disalin ke `/tmp` saat Lambda mulai. Mode ini cocok untuk presentasi, tetapi data tidak dijamin persisten antar cold start; gunakan MySQL/PostgreSQL online untuk data production.
+
 Setelah deployment selesai, buka `/spin-wheel` pada URL Vercel. Vercel akan menjalankan `npm run build` untuk membuat asset frontend.
