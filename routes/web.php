@@ -5,7 +5,7 @@ use App\Http\Controllers\SpinWheelController;
 use App\Http\Controllers\WalletSimulationController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', fn () => redirect()->route('spin-wheel.index'));
+Route::get('/', fn () => response('', 302)->header('Location', '/spin-wheel'));
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
